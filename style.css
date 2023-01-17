@@ -1,0 +1,219 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&display=swap");
+:root {
+  --scene-size: 70vmin;
+  --multiplier: 20;
+  --duration: calc(var(--multiplier) * 1s);
+  --turns: calc((var(--multiplier) / 2) * 1turn);
+  --border-width: 2px;
+  --border-style: dotted;
+}
+@media (min-width: 500px) {
+  :root {
+    --border-width: 4px;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background-color: black;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.scene {
+  position: relative;
+  width: var(--scene-size);
+  height: var(--scene-size);
+  -webkit-animation: rotate calc(var(--duration) * 8) linear infinite;
+          animation: rotate calc(var(--duration) * 8) linear infinite;
+  pointer-events: none;
+}
+
+.items {
+  display: contents;
+}
+
+.item {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  opacity: 0.8;
+  width: 100%;
+  height: 100%;
+  -webkit-animation: rotate var(--duration) infinite;
+          animation: rotate var(--duration) infinite;
+  -webkit-animation-timing-function: cubic-bezier(calc(0.015 * var(--index)), 0, calc(0.0025 * var(--index)), 0);
+          animation-timing-function: cubic-bezier(calc(0.015 * var(--index)), 0, calc(0.0025 * var(--index)), 0);
+}
+.item::after {
+  --size: calc(40% + var(--border-width));
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: var(--size);
+  height: var(--size);
+  border-width: var(--border-width);
+  border-style: var(--border-style);
+  border-radius: 50%;
+  transform: translate(-50%, 0);
+  -webkit-animation: movement var(--duration) alternate infinite;
+          animation: movement var(--duration) alternate infinite;
+  -webkit-animation-timing-function: cubic-bezier(calc(0.1 * var(--index)), 0, calc(0.025 * var(--index)), 0);
+          animation-timing-function: cubic-bezier(calc(0.1 * var(--index)), 0, calc(0.025 * var(--index)), 0);
+}
+
+[data-set="0"] .item {
+  -webkit-animation-delay: calc(var(--duration) * (0 * 0.02));
+          animation-delay: calc(var(--duration) * (0 * 0.02));
+}
+[data-set="0"] .item::after {
+  border-color: forestgreen;
+}
+
+[data-set="1"] .item {
+  -webkit-animation-delay: calc(var(--duration) * (1 * 0.02));
+          animation-delay: calc(var(--duration) * (1 * 0.02));
+}
+[data-set="1"] .item::after {
+  border-color: yellow;
+}
+
+[data-set="2"] .item {
+  -webkit-animation-delay: calc(var(--duration) * (2 * 0.02));
+          animation-delay: calc(var(--duration) * (2 * 0.02));
+}
+[data-set="2"] .item::after {
+  border-color: blue;
+}
+
+[data-set="3"] .item {
+  -webkit-animation-delay: calc(var(--duration) * (3 * 0.02));
+          animation-delay: calc(var(--duration) * (3 * 0.02));
+}
+[data-set="3"] .item::after {
+  border-color: hotpink;
+}
+
+[data-set="4"] .item {
+  -webkit-animation-delay: calc(var(--duration) * (4 * 0.02));
+          animation-delay: calc(var(--duration) * (4 * 0.02));
+}
+[data-set="4"] .item::after {
+  border-color: mediumorchid;
+}
+
+@-webkit-keyframes rotate {
+  to {
+    transform: rotate(var(--turns));
+  }
+}
+
+@keyframes rotate {
+  to {
+    transform: rotate(var(--turns));
+  }
+}
+@-webkit-keyframes movement {
+  0%, 25% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: scale(0.75) translate(-10%, 10%) rotate(0.5turn);
+  }
+  75% {
+    transform: scale(1.25) skew(45deg) rotate(1turn) translate(-50%, 10%);
+  }
+}
+@keyframes movement {
+  0%, 25% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: scale(0.75) translate(-10%, 10%) rotate(0.5turn);
+  }
+  75% {
+    transform: scale(1.25) skew(45deg) rotate(1turn) translate(-50%, 10%);
+  }
+}
+.controls {
+  --color: lightgray;
+  --color-focus: yellow;
+  --border-width: 2px;
+  --border: var(--border-width) solid var(--color);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  color: var(--color);
+  z-index: 2;
+}
+.controls > * + * {
+  margin-top: 0.5rem;
+}
+
+.select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.label {
+  clip: rect(0 0 0 0);
+  -webkit-clip-path: inset(50%);
+          clip-path: inset(50%);
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+  height: 1px;
+}
+
+.icon {
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 0.5em;
+  transform: translateY(-50%);
+}
+
+select {
+  all: unset;
+  padding: 0.25rem 1rem 0.25rem 0;
+  font-family: inherit;
+  font-size: 18px;
+  line-height: 1.4;
+  background-color: transparent;
+  color: inherit;
+  border-bottom: var(--border);
+  cursor: pointer;
+  width: 100%;
+}
+select:active {
+  transform: translateY(1px);
+}
+select:focus {
+  border-color: var(--color-focus);
+}
+select:focus + .icon {
+  fill: var(--color-focus);
+}
+select option {
+  color: black;
+}
